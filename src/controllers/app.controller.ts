@@ -14,13 +14,9 @@ export class AppController {
   @Post('create/user')
   createUser(@Body() createuser:UserDtos){
     try {
-      console.log(createuser);
-      
-      return;
       return this.appService.createUser(createuser)
     } catch (error) {
       console.log(error);
-      
     }
   }
 

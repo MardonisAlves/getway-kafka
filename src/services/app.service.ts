@@ -10,6 +10,6 @@ export class AppService {
   }
 
   createUser(user:UserDtos){
-    this.testSerrvice.emit('create_user',user);
+   return this.testSerrvice.emit('create_user',user);
   }
 }
