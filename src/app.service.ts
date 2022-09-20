@@ -6,7 +6,7 @@ import { UserDtos } from './dtos/user-dtos';
 export class AppService {
   constructor(@Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka){}
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello World Kafka!';
   }
 
   createUser(user:UserDtos){
