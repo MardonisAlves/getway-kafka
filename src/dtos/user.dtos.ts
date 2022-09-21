@@ -4,9 +4,18 @@ export  class UserDtos{
 
     @IsString()
     @IsNotEmpty()
-    name: string;
+    first_name: string;
     
     @IsString()
     @IsNotEmpty()
     email: string;
+
+    @IsString()
+    @IsNotEmpty()
+    last_name: string;
+
+    @IsString()
+    @IsNotEmpty()
+    phone: string;
+    
 }

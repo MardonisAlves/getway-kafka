@@ -17,9 +17,6 @@ import { ConfigModule } from '@nestjs/config';
           client: {
             clientId: process.env.CLIENT_ID,
             brokers: [process.env.KAFKA_BROUKER]
-          },
-          consumer: {
-            groupId: process.env.COMSUMER_ID
           }
         }
       }
