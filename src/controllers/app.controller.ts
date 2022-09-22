@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, OnModuleInit, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Post, Res } from '@nestjs/common';
 import { AppService } from '../services/app.service';
 import { UserDtos } from '../dtos/user.dtos';
 import { ClientKafka } from '@nestjs/microservices';
@@ -28,10 +28,17 @@ export class AppController implements OnModuleInit {
   }
 
 
+  @Delete('delete/user/:id')
+  async deleteUser(@Param('id') id:string){
+   return  this.testSerrvice.send('delete_user',id);  
+  }
+
+
 
 
   async onModuleInit() {
     this.testSerrvice.subscribeToResponseOf('verificar_user');
+    this.testSerrvice.subscribeToResponseOf('delete_user')
     await this.testSerrvice.connect()
   }
 }
