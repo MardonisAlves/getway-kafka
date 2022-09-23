@@ -41,11 +41,17 @@ export class AppController implements OnModuleInit {
     return this.testSerrvice.send('update_user',updateuser);
   }
 
+  @Get('all/users')
+  async allUsers(){
+    return this.testSerrvice.send('all_users',{})
+  }
+
   async onModuleInit() {
     this.testSerrvice.subscribeToResponseOf('verificar_user');
     this.testSerrvice.subscribeToResponseOf('delete_user');
     this.testSerrvice.subscribeToResponseOf('create_user');
     this.testSerrvice.subscribeToResponseOf('update_user');
+    this.testSerrvice.subscribeToResponseOf('all_users');
     await this.testSerrvice.connect();
   }
 }
