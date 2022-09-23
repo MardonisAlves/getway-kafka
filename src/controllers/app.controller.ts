@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Post, Res } from '@nestjs/common';
-import { AppService } from '../services/app.service';
+import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Post, Put, Res } from '@nestjs/common';
 import { UserDtos } from '../dtos/user.dtos';
 import { ClientKafka } from '@nestjs/microservices';
 import { Response } from 'express';
@@ -7,13 +6,13 @@ import { lastValueFrom } from 'rxjs';
 @Controller('api/v1')
 export class AppController implements OnModuleInit {
   constructor(
-    private readonly appService: AppService,
-    @Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
+  @Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
 
   @Post('create/user')
  async createUser(@Body() createuser: UserDtos, @Res() response:Response) {
-    const create = await this.appService.createUser(createuser);
-    return response.json(create)
+    const create =  this.testSerrvice.send('create_user',createuser);
+    const res = await lastValueFrom(create);
+    return response.json(res)
   }
 
   @Get('verificar/user/:email')
@@ -33,13 +32,21 @@ export class AppController implements OnModuleInit {
    return  this.testSerrvice.send('delete_user',id);  
   }
 
-
-
+  @Put('update/user/:id')
+  async updateUser(
+    @Body() user:UserDtos,
+    @Param('id') id:string
+  ){
+    const updateuser = {...user,id}
+    return this.testSerrvice.send('update_user',updateuser);
+  }
 
   async onModuleInit() {
     this.testSerrvice.subscribeToResponseOf('verificar_user');
-    this.testSerrvice.subscribeToResponseOf('delete_user')
-    await this.testSerrvice.connect()
+    this.testSerrvice.subscribeToResponseOf('delete_user');
+    this.testSerrvice.subscribeToResponseOf('create_user');
+    this.testSerrvice.subscribeToResponseOf('update_user');
+    await this.testSerrvice.connect();
   }
 }
 
