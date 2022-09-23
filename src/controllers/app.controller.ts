@@ -3,11 +3,16 @@ import { UserDtos } from '../dtos/user.dtos';
 import { ClientKafka } from '@nestjs/microservices';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
+import { ApiCreatedResponse, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import ResponseCreateUser from 'src/dtos/reponse-createuser.dtos';
+
+@ApiTags('API GET WAY')
 @Controller('api/v1')
 export class AppController implements OnModuleInit {
   constructor(
   @Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
 
+  @ApiCreatedResponse({description:'Usuário cadastrado com sucesso', type:ResponseCreateUser})
   @Post('create/user')
  async createUser(@Body() createuser: UserDtos, @Res() response:Response) {
     const create =  this.testSerrvice.send('create_user',createuser);
@@ -15,6 +20,11 @@ export class AppController implements OnModuleInit {
     return response.json(res)
   }
 
+  @ApiParam({
+    name:'email',
+    type:'string',
+    example:'mardonisgp@gmail.com'
+  })
   @Get('verificar/user/:email')
   async verificarUser(
     @Param('email') email: string,
@@ -26,12 +36,21 @@ export class AppController implements OnModuleInit {
     return response.json(getuser);
   }
 
-
+  @ApiParam({
+    name:'id',
+    type:'string',
+    example:'abd3242c-d512-4904-9a66-2e5882920e0d'
+  })
   @Delete('delete/user/:id')
   async deleteUser(@Param('id') id:string){
    return  this.testSerrvice.send('delete_user',id);  
   }
 
+  @ApiParam({
+    name:'id',
+    type:'string',
+    example:'abd3242c-d512-4904-9a66-2e5882920e0d'
+  })
   @Put('update/user/:id')
   async updateUser(
     @Body() user:UserDtos,
