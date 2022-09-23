@@ -3,7 +3,7 @@ import { UserDtos } from '../dtos/user.dtos';
 import { ClientKafka } from '@nestjs/microservices';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
-import { ApiCreatedResponse, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import ResponseCreateUser from 'src/dtos/reponse-createuser.dtos';
 
 @ApiTags('API GET WAY')
