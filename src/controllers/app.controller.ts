@@ -4,16 +4,15 @@ import { ClientKafka } from '@nestjs/microservices';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import ResponseCreateUser from 'src/dtos/reponse-createuser.dtos';
+import ResponseCreateUser from './../dtos/reponse-createuser.dtos';
 
 @ApiTags('API GET WAY')
 @Controller('api/v1')
 export class AppController implements OnModuleInit {
-  constructor(
-  @Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
+  constructor(@Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
 
   @ApiCreatedResponse({description:'Usuário cadastrado com sucesso', type:ResponseCreateUser})
-  @Post('create/user')
+  @Post('/create/user')
  async createUser(@Body() createuser: UserDtos, @Res() response:Response) {
     const create =  this.testSerrvice.send('create_user',createuser);
     const res = await lastValueFrom(create);
