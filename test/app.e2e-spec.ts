@@ -7,17 +7,11 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
   let createuser = {
     first_name:'Mardonis',
-    email:'mardonisgp@gmail.com',
+    email:'mardonisalesgp@gmail.com',
     last_name:'Alves B',
     phone:'85992590075'
   }
 
-  let userExiste = {
-    first_name:'Mardonis',
-    email:'mardonisgp@gmail.com',
-    last_name:'Alves B',
-    phone:'85992590075'
-  }
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -32,24 +26,17 @@ describe('AppController (e2e)', () => {
       .post('/api/v1/create/user')
       .send(createuser)
       .then((res) =>{
-        expect(res.statusCode).toEqual(201);
-        expect(res.body).toEqual({message:'Usuario cadastrado com sucesso'});
+        if(res.body.message === 'Usuario cadastrado com sucesso'){
+          expect(res.statusCode).toEqual(201);
+          expect(res.body).toEqual({message:'Usuario cadastrado com sucesso'});
+        }else{
+          expect(res.statusCode).toEqual(201);
+          expect(res.body).toEqual({message:'Usuario ja cadastrado'}); 
+        }
       })
       
     });
     
-    it('User Existe (POST)', async () => {
-      return await request(app.getHttpServer())
-      .post('/api/v1/create/user')
-      .send(userExiste)
-      .then((res) =>{
-        expect(res.statusCode).toEqual(201);
-        expect(res.body).toEqual({message:'Usuario ja cadastrado'});
-      })
-     
-  });
-
-
   afterAll(async () => {
     await app.close();
   });
