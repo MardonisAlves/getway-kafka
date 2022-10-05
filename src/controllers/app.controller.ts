@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, OnModuleInit, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { UserDtos } from '../dtos/user.dtos';
 import { ClientKafka } from '@nestjs/microservices';
 import { Response } from 'express';
 import { lastValueFrom } from 'rxjs';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import ResponseCreateUser from './../dtos/reponse-createuser.dtos';
+import { LocalAuthGuard } from 'src/auth/local-auth.guards';
 
 @ApiTags('API GET WAY')
 @Controller('api/v1')
@@ -12,6 +13,7 @@ export class AppController implements OnModuleInit {
   constructor(@Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
 
   @ApiCreatedResponse({description:'Usuário cadastrado com sucesso', type:ResponseCreateUser})
+ // @UseGuards(LocalAuthGuard)
   @Post('/create/user')
  async createUser(@Body() createuser: UserDtos, @Res() response:Response) {
     const create =  this.testSerrvice.send('create_user',createuser);
