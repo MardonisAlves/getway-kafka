@@ -6,6 +6,8 @@ import { lastValueFrom } from 'rxjs';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import ResponseCreateUser from './../dtos/reponse-createuser.dtos';
 import { LocalAuthGuard } from 'src/auth/local-auth.guards';
+import { JwtAuthGuard } from 'src/auth/jwt-guard';
+import { Public } from 'src/decorators/decorators';
 
 @ApiTags('API GET WAY')
 @Controller('api/v1')
@@ -13,7 +15,6 @@ export class AppController implements OnModuleInit {
   constructor(@Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka) { }
 
   @ApiCreatedResponse({description:'Usuário cadastrado com sucesso', type:ResponseCreateUser})
- // @UseGuards(LocalAuthGuard)
   @Post('/create/user')
  async createUser(@Body() createuser: UserDtos, @Res() response:Response) {
     const create =  this.testSerrvice.send('create_user',createuser);
@@ -61,6 +62,7 @@ export class AppController implements OnModuleInit {
     return this.testSerrvice.send('update_user',updateuser);
   }
 
+  @Public()
   @Get('all/users')
   async allUsers(){
     return this.testSerrvice.send('all_users',{})
