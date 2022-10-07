@@ -5,7 +5,7 @@ import { lastValueFrom } from "rxjs";
 import { AuthService } from "src/auth/auth.service";
 import AuthDtos from "src/dtos/auth.dtos";
 import { Response } from "express";
-import { LocalAuthGuard } from "src/auth/local-auth.guards";
+import { Public } from "src/decorators/decorators";
 
 @ApiTags('Auth')
 @Controller('api/v1')
@@ -15,7 +15,7 @@ export default class AuthLogin implements OnModuleInit {
         @Inject("TEST_SERVICE") private readonly testSerrvice: ClientKafka,
     ) { }
 
-
+    @Public()
     @Post('/auth/login')
     async login(@Body() auth: AuthDtos, @Res() res: Response) {
         const user = this.testSerrvice.send('auth_login', auth);
@@ -30,7 +30,8 @@ export default class AuthLogin implements OnModuleInit {
             return res.json(jwt);
         }
     }
-
+    
+    
     @Post('/cadastro/user')
     async cadastroUser(@Body() cadastro: AuthDtos) {
         const hash = await this.authService.encryptPassword(cadastro);
@@ -40,10 +41,8 @@ export default class AuthLogin implements OnModuleInit {
         })
     }
 
-   // @UseGuards(LocalAuthGuard)
     @Get('/auth/info/:email')
     async AuthInfo(@Param('email') email:string){
-       
         return  this.testSerrvice.send('auth_info', email);
     }
 
